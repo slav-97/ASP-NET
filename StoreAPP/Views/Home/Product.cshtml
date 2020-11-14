@@ -1,0 +1,190 @@
+﻿@model StoreApp.Models.ViewModels.ProductInfoViewModel
+
+@{
+    ViewBag.Title = Model.Product.Name + " " + Model.Product.Manufacturer;
+}
+
+<div class="content">
+    <div class="product">
+        <div class="product-image-block">
+            <img class="product-info-image" src="@Model.Product.ImageUrl" data-large="@Model.Product.ImageUrl" />
+        </div>
+        <div class="product-features">
+            <table class="product-info">
+                <tr>
+                    <td>#Id:</td>
+                    <td>@Model.Product.Id</td>
+                </tr>
+                <tr>
+                    <td>Название продукта:</td>
+                    <td>@Model.Product.Name</td>
+                </tr>
+                <tr>
+                    <td>Производитель:</td>
+                    <td>@Model.Product.Manufacturer</td>
+                </tr>
+                <tr>
+                    <td>Тип памяти:</td>
+                    <td>@Model.Features.MemoryType</td>
+                </tr>
+                <tr>
+                    <td>Обьем оперативной памяти (ГБайт):</td>
+                    <td>@Model.Features.MemoryCapacity</td>
+                </tr>
+                <tr>
+                    <td>Тактовая частота(MГц):</td>
+                    <td>@Model.Features.Frequency</td>
+                </tr>
+                <tr>
+                    <td>Напряжение(В):</td>
+                    <td>@Model.Features.Voltage</td>
+                </tr>
+                <tr>
+                    @{
+                        List<StoreApp.Models.StoreModels.Assessment> assessmentsList = Model.Assessments.ToList();
+                        int totalAssesment = 0;
+                        int totalCount = 0;
+                        double everageAssesment = 0;
+                        foreach (var assessment in assessmentsList)
+                        {
+                            if (assessment.ProductId == Model.Product.Id)
+                            {
+                                totalAssesment += assessment.Evaluation;
+                                totalCount++;
+                            }
+                        }
+                        if (totalCount != 0)
+                        {
+                            everageAssesment = Math.Round((double)totalAssesment / totalCount, 2);
+                        }
+                    }
+                    <td>Оценка:</td>
+                    <td><span class="price" title="Оценка. Проголосовали @totalCount человек"> @everageAssesment </span></td>
+                </tr>
+                <tr>
+                    <td>Цена:</td>
+                    <td><span class="price"> @Model.Product.Price бел. руб.</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="float: left; margin: 0px 5px">
+                            @using (Html.BeginForm("AddToCart", "Cart"))
+                            {
+                                <input type="hidden" id="productId" name="productId" value="@Model.Product.Id" />
+                                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                                <input type="submit" class="add-in-cart-link" value="В корзину" />
+                            }
+                        </div>
+                        <div>
+                            @using (Html.BeginForm("AddToСomparison", "Сomparison"))
+                            {
+                                <input type="hidden" id="productId" name="productId" value="@Model.Product.Id" />
+                                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                                <input type="submit" class="add-in-campare" value="В сравнение" />
+                            }
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        int evaluetionId = 0;
+        bool evaluetionIs = false;
+        int evaluetion = 0;
+        foreach (var assessment in Model.Assessments)
+        {
+            if (assessment.UserName == User.Identity.Name && assessment.ProductId == Model.Product.Id)
+            {
+                evaluetionIs = true;
+                evaluetion = assessment.Evaluation;
+                evaluetionId = assessment.Id;
+                break;
+            }
+        }
+        if (evaluetionIs)
+        {
+        <div class="add-review">
+            <h4>Ваша оценка товару #@Model.Product.Id : @evaluetion</h4>
+            <div>
+                @using (Html.BeginForm("DeleteAssessment", "Home"))
+                {
+                    <input  type="hidden" name="Id" id="Id" value="@evaluetionId"/>
+                    @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                    <p><input type="submit" class="add-in-campare" value="Удалить оценку" /></p>
+                }
+            </div>
+
+        </div>
+        }
+        else
+        {
+            <div class="add-review">
+                @using (Html.BeginForm("AddAssessment", "Home"))
+                {
+                    <input type="text" name="evaluetion" id="evaluetion" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.Product.Id" />
+                    @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                    @Html.Hidden("username",User.Identity.Name)
+                    <p><input type="submit" class="add-in-campare" value="Поставить оценку" /></p>
+                }
+            </div>
+        }
+
+
+            <div class="add-review">
+                <h4>Добавление нового отзыва для товара #@Model.Product.Id @Model.Product.Name @Model.Product.Manufacturer</h4>
+                @using (Html.BeginForm("AddReview", "Home"))
+                {
+                    @User.Identity.Name
+                    <input type="hidden" id="Id" name="Id" value="@Model.Product.Id" />
+                    <input type="hidden" id="userName" name="userName" value="@User.Identity.Name" />
+                    <textarea id="reviewText" name="reviewText" class="review-input"></textarea>
+                    <p><input type="submit" class="add-in-campare" value="Добавить отзыв" /></p>
+                }
+            </div>
+    }
+    <div class="reviews">
+        <h4>Отзывы (@Model.Reviews.Count()):</h4>
+        @foreach (var review in Model.Reviews)
+        {
+
+            <div class="review-block">
+                <p class="review-author">
+                    @review.NickNameAuthor :
+                    @if (review.NickNameAuthor == User.Identity.Name)
+                    {
+                        <a href="/Home/DeleteReview?Id=@review.ProductId&author=@review.NickNameAuthor">Удалить отзыв</a>
+                    }
+                </p>
+                <p>@review.Text</p>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    jQuery(function () {
+
+        if (!$.fn.imagezoomsl) {
+
+            $('.msg').show();
+            return;
+        }
+        else $('.msg').hide();
+
+
+        $('.product-info-image').imagezoomsl({
+
+            zoomrange: [2.12, 12],
+            magnifiersize: [530, 340],
+            scrollspeedanimate: 10,
+            loopspeedanimate: 5,
+            cursorshadeborder: "10px solid black",
+            magnifiereffectanimate: "slideIn"		
+        });
+    });
+</script>
+
+
+

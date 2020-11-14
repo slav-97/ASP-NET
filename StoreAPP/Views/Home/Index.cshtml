@@ -1,0 +1,200 @@
+﻿@model StoreApp.Models.ViewModels.ProductsViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+<div class="content_slider">
+    <div class="slider">
+        <input class="slider_nav" type="radio" name="slider" checked="checked" />
+        <input class="slider_nav" type="radio" name="slider" />
+        <input class="slider_nav" type="radio" name="slider" />
+        <div class="slider_inner">
+            <div class="slider_contents">
+                <img src="~/Content/Images/test1.png" class="slideImg2" />
+                <h2 class="slider__caption">Лучшие модели и лучшие производители</h2>
+                <p class="slider__txt">
+                    Наш магазин предоставляет широкий выбор различных типов оперативной памяти.
+                    Среди наших партнеров множество ведущих производителей ОП в мире
+                </p>
+            </div>
+            <div class="slider_contents">
+                <img src="~/Content/Images/test2.png" class="slideImg2" />
+                <h2 class="slider__caption">Новая модель Asus Pro</h2>
+                <p class="slider__txt">В нашем магазине вы сможете приобрести оперативную память нового поколения DD4. Самые лучшие платы имеют объем до 128 Gb. Спешите купить!</p>>
+            </div>
+            <div class="slider_contents3">
+                <img src="~/Content/Images/test3.png" class="slideImg2" />
+                <h2 class="slider__caption">Самые выгодные цены</h2>
+                <p class="slider__txt">Наш магазин предоставляет своим покупателям множество бонусов и скидок. Таких цен вы не найдете в своем городе! </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="searh-block">
+    <div class="search-products">
+        <div class="form-search">
+            @using (Html.BeginForm("SearchData", "Home"))
+            {
+                <input type="text" class="search-input" name="serchInfo" />
+
+                <input type="submit" class="search-submit" value="Поиск" />
+            }
+        </div>
+        <a href="/Cart/Index" title="Корзина">
+            <div class="cart">
+                <img src="~/Content/Images/CartIcon.png" class="cart-icon" />
+                <div class="cart-info">
+                    @{
+                        int productCout = 0;
+                        foreach (var line in Model.Cart.Lines)
+                        {
+                            productCout += line.Quantity;
+                        }
+                    }
+                    (@productCout)
+                </div>
+            </div>
+        </a>
+        <a href="/Сomparison/Index" title="Сравнить">
+            <div class="cart">
+                <img src="~/Content/Images/iconCompare2.png" class="cart-icon" />
+                <div class="cart-info">
+                    (@Model.Сomparison.Lines.Count())
+                </div>
+            </div>
+        </a>
+    </div>
+    
+</div>
+
+<div class="content">
+    @{
+        List<StoreApp.Models.StoreModels.Features> featuresList = Model.Features.ToList();
+        List<StoreApp.Models.StoreModels.Assessment> assessmentsList =Model.Assessments.ToList();
+        List<StoreApp.Models.StoreModels.Review> reviewsList = Model.Reviews.ToList();
+    }
+
+    <div class="filter">
+        @using (Html.BeginForm("FilterDate", "Home"))
+        {
+            <p id="filter-header"><span>> Сортировать...</span></p>
+            <div id="filter-block">
+                @Html.DropDownListFor(x => x.ProductsFilter.SelectedIndex, Model.ProductsFilter.SortTypes)
+            </div>
+            <p id="filter-header"><span>> Производитель...</span></p>
+            <div id="filter-block">
+                @for (int i = 0; i < Model.ProductsFilter.ManufacturersList.Count; i++)
+                {
+                    <p>
+                        @Html.CheckBoxFor(x => x.ProductsFilter.ManufacturersList[i].IsChecked, new { @class = "filter-chek" })
+                        @Html.LabelFor(x => x.ProductsFilter.ManufacturersList[i].Manufacturer,
+                            Model.ProductsFilter.ManufacturersList[i].Manufacturer.ToString(), new { @class = "label-filter" })
+                    </p>
+                }
+            </div>
+            <p id="filter-header"><span>> Тип памяти...</span></p>
+            <div id="filter-block">
+                @for (int i = 0; i < Model.ProductsFilter.MemoryTypeList.Count; i++)
+                {
+                    <p>
+                        @Html.CheckBoxFor(x => x.ProductsFilter.MemoryTypeList[i].IsChecked, new { @class = "filter-chek" })
+                        @Html.LabelFor(x => x.ProductsFilter.MemoryTypeList[i].MemoryType,
+                            Model.ProductsFilter.MemoryTypeList[i].MemoryType.ToString(), new { @class = "label-filter" })
+                    </p>
+                }
+            </div>
+            <p id="filter-header"><span>> Обьем памяти...</span></p>
+            <div id="filter-block">
+                @for (int i = 0; i < Model.ProductsFilter.MemoryCapacities.Count; i++)
+                {
+                    <p>
+                        @Html.CheckBoxFor(x => x.ProductsFilter.MemoryCapacities[i].IsChecked, new { @class = "filter-chek" })
+                        @Html.Label(Model.ProductsFilter.MemoryCapacities[i].Capacity + " GB ", new { @class = "label-filter" })
+                    </p>
+                }
+            </div>
+            <input type="submit" id="filter-submit" value="Установить фильтр" />
+        }
+    </div>
+    <div class="list-products">
+        @foreach (StoreApp.Models.StoreModels.Product product in Model.Products)
+        {
+            <div class="product">
+                <div class="product-image-block">
+                    <img class="product-image" src="@product.ImageUrl" />
+                </div>
+
+                <div class="product-features">
+                    <h4>#@product.Id @product.Name @product.Manufacturer</h4>
+                    <p>
+                        @{
+                            StoreApp.Models.StoreModels.Features features = featuresList.Find(x => x.Id == product.FeaturesId);
+                        }
+                        Назначение: @features.Appointment , тип: @features.MemoryType, обьем: @features.MemoryCapacity;
+                    </p>
+                    <p>
+                        @{
+                            int totalAssesment = 0;
+                            int countComments = 0;
+                            int totalCount = 0;
+                            double everageAssesment = 0;
+                            foreach (var assessment in assessmentsList)
+                            {
+                                if (assessment.ProductId == product.Id)
+                                {
+                                    totalAssesment += assessment.Evaluation;
+                                    totalCount++;
+                                }
+                            }
+                            if (totalCount != 0)
+                            {
+                                everageAssesment = Math.Round((double)totalAssesment / totalCount, 2);
+                            }
+                            foreach (var comment in reviewsList)
+                            {
+                                if (comment.ProductId == product.Id)
+                                {
+                                    countComments++;
+                                }
+                            }
+
+                        }
+                        <img src="~/Content/Images/assessment.png" class="product-info-icon" title="Оценка. Проголосовали @totalCount человек" /><span title="Оценка. Проголосовали @totalCount человек"> @everageAssesment </span>
+                        <img src="~/Content/Images/comments.png" class="product-info-icon" title="Комментарии" />><span> @countComments </span>
+                    </p>
+                    <div class="more-info-block">
+                        <p>Цена от:<span class="price"> @product.Price бел. руб.</span></p>
+                        <p><a class="more-about-product-link" href="/Home/Product?Id=@product.Id">Подробнее >></a></p>
+                        <div style="float: left; margin: 0px 5px">
+                            @using (Html.BeginForm("AddToCart", "Cart"))
+                            {
+                                <input type="hidden" id="productId" name="productId" value="@product.Id" />
+                                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                                <input type="submit" class="add-in-cart-link" value="В корзину" />
+                            }
+                        </div>
+                        <div>
+                            @using (Html.BeginForm("AddToСomparison", "Сomparison"))
+                            {
+                                <input type="hidden" id="productId" name="productId" value="@product.Id" />
+                                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                                <input type="submit" class="add-in-campare" value="В сравнение" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="page-navigation">
+            <div class="links">
+                @for (int i = 1; i <= ViewBag.PageInfo.TotalPages; i++)
+                {
+                    
+                    <a class="page-link" href="/Home/FilterDate>@i</a>
+                }
+                }
+            </div>
+        </div>
+    </div>
+    
+</div>

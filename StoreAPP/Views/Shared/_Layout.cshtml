@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title – приложение ASP.NET</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/ContentStyles.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/headerStyle.css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/zoomsl-3.0.min.js"></script>
+
+</head>
+<body style="padding: 0px">
+    <div class="header">
+        <div class="top_menu">
+            <div class="content">
+                <div class="main_menu">
+                    <ul>
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("О программе", "About", "Home")</li>
+                        <li>@Html.ActionLink("Контакт", "Contact", "Home")</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @RenderBody()
+
+
+    <div class="footersite">
+        <div class="footercontent">
+            <div class="footerMenu">
+                <ul>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("О программе", "About", "Home")</li>
+                    <li>@Html.ActionLink("Контакт", "Contact", "Home")</li>
+                </ul>
+            </div>
+            <div class="contacts">
+                <p>Контактная информация:</p>
+                <p>E-mail: romanchik.aleksej@bk.ru</p>
+                <p>Телефон(МТС): +375(33)888-77-55</p>
+                <p>Страница вк: <a href="https://vk.com/alexeyromanchik">https://vk.com/alexeyromanchik</a></p>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+﻿@model StoreApp.Models.ViewModels.ProductsViewModel
+@{
+    ViewBag.Title = "Сравнение товаров";
+}
+
+
+<div class="content">
+    <h3>Сравнение товаров:</h3>
+    <div class="camparison-block">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Изображение</th>
+                    <th>Тип</th>
+                    <th>Назначение</th>
+                    <th>Обьем памяти</th>
+                    <th>Тактовая частота</th>
+                    <th>Напряжение</th>
+                    <th>Производитель</th>
+                    <th>Цена</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var line in Model.Сomparison.Lines)
+                {
+                <tr>
+                    <td>@line.Product.Id</td>
+                    <td>
+                        <img src="@line.Product.ImageUrl" width="250" />
+                    </td>
+                    <td>@line.Features.MemoryType</td>
+                    <td>@line.Features.Appointment</td>
+                    <td>@line.Features.MemoryCapacity</td>
+                    <td>@line.Features.Frequency</td>
+                    <td>@line.Features.Voltage</td>
+                    <td>@line.Product.Manufacturer</td>
+                    <td>@line.Product.Price</td>
+                    <td>
+                        @using (Html.BeginForm("RemoveFromComparison", "Сomparison"))
+                        {
+                            <input type="hidden" id="productId" name="productId" value="@line.Product.Id" />
+                            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                            <input type="submit" class="delete-from-cart" value="Удалить" />
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+
+
+        </table>
+    </div>
+</div>

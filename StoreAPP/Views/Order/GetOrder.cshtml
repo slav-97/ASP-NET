@@ -1,0 +1,14 @@
+﻿@model StoreApp.Models.StoreModels.ShopOrder
+
+@{
+    ViewBag.Title = "GetOrder";
+}
+<div class="content">
+    <h2>Благодарим,@Model.CustomerName, за оформление заказа!</h2>
+    <h4>
+        Ваш заказ #@Model.Id, дата @Model.OrderDate.ToString(),общей стоимостью @Model.TotalPrice по адресу:
+        @Model.CustomerAddress был оформлен. Наши сотрудники свяжутся с ваши.
+    </h4>
+</div>
+
+

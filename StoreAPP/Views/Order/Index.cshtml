@@ -1,0 +1,56 @@
+﻿@model StoreApp.Models.ViewModels.OrderViewModel
+
+@{
+    ViewBag.Title = "Оформление заказа";
+}
+
+<div class="content">
+    <h4>Оформление заказа</h4>
+    @using (Html.BeginForm("GetOrder", "Order")) 
+    {
+    <table class="get-order-table">
+        <tr>
+            <td>ФИО :</td>
+            <td><input type="text" name="CustomerName" id="CustomerName" /></td>
+        </tr>
+        <tr>
+            <td>Номер телефона</td>
+            <td><input type="text" name="CustomerPhone" id="CustomerPhone" /></td>
+        </tr>
+        <tr>
+            <td>Адрес доставки</td>
+            <td><input type="text" name="CustomerAddress" id="CustomerAddress" /></td>
+        </tr>
+        <tr>
+            <td>Полная стоимость</td>
+            <td>
+                @Model.Cart.ComputeTotalValue().ToString("# бел. руб.")
+                <input type="hidden" id="TotalPrice" name="TotalPrice" value="@Model.Cart.ComputeTotalValue()" />
+            </td>
+        </tr>
+        <tr>
+            <td>Дата заказа</td>
+            <td>
+                @DateTime.Now
+                <input type="hidden" id="OrderDate" name="OrderDate" value="@DateTime.Now"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    @if (Model.Cart.Lines.Count() > 0)
+                    {
+                        <input type="submit" class="add-in-cart-link" value="Заказать" />
+                    }
+                    <a class="add-in-campare" href="/Home/Index" style=" margin: 100px 20px">Отмена</a>
+                </p>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+    
+    }
+</div>
+

@@ -1,0 +1,59 @@
+﻿@model StoreApp.Models.ViewModels.ProductsViewModel
+@{
+    ViewBag.Title = "Ваша корзина";
+}
+
+
+<div class="content">
+    <h3>Ваши товары:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <td></td>
+                <td>Колличество</td>
+                <td>Продукт</td>
+                <th class="text-right">Цена</th>
+                <th class="text-right">Общая цена</th>
+                <th class="text-right">Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var line in Model.Cart.Lines)
+            {
+                <tr>
+                    <td><img src="@line.Product.ImageUrl" class="product-image" /></td>
+                    <td>@line.Quantity</td>
+                    <td>@line.Product.Id</td>
+                    <td>@line.Product.Price.ToString("# бел. руб.")</td>
+                    <td>@((line.Quantity * line.Product.Price).ToString("# бел. руб."))</td>
+                    <td>
+                        @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                        {
+                            <input type="hidden" id="productId" name="productId" value="@line.Product.Id" />
+                            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                            <input type="submit" class="delete-from-cart" value="Удалить" />
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">Итого:</td>
+                <td сcolspan="2" class="text-right">
+                    @Model.Cart.ComputeTotalValue().ToString("# бел. руб.")
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    @if (Model.Cart.Lines.Count() > 0)
+    {
+        <div class="get-order">
+            <div style="width:200px; margin: auto">
+                <a href="/Order/Index" class="get-order-button">Оформить заказ</a>
+            </div>
+        </div>
+    }
+
+</div>
