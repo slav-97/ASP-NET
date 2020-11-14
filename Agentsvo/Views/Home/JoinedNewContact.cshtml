@@ -1,0 +1,27 @@
+﻿@model Agentsvo.Models.PhoneContact
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>JoinedNewContact</title>
+</head>
+<body>
+    <div>
+        <p>Был добавлен новый контакт!</p>
+        <p>id: @Model.Id</p>
+        <p>Имя: @Model.Name</p>
+        <p>Фамилия: @Model.Surname</p>
+        <p>День сделки: @Model.BirthDay</p>
+        <p>Услуга: @Model.Usluga</p>
+        <p>Номер телефона: @Model.PhoneNumber</p>
+
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,76 @@
+﻿@model Agentsvo.Models.PhoneContact
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddNewContact</title>
+    <link href="~/Content/editionContactStyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary()
+        <table>
+            <tr>
+                <td>
+                    Введите ID агентства:
+                </td>
+                <td>
+                    @Html.TextBoxFor(x => x.Id)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Введите имя:
+                </td>
+                <td>
+                    @Html.TextBoxFor(x => x.Name)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Введите фамилию:
+                </td>
+                <td>
+                    @Html.TextBoxFor(x => x.Surname)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Введите дату сделки:
+                </td>
+                <td>
+                    @Html.TextBoxFor(x => x.BirthDay)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Введите услугу:
+                </td>
+                <td>
+                    @Html.TextBoxFor(x => x.Usluga)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Введите номер телефона:
+                </td>
+                <td>
+                    @Html.TextBoxFor(x => x.PhoneNumber)
+                </td>
+            </tr>
+        </table>
+            <input type="submit" value="AddNewContactUsingWebApi" />
+        }
+    </div>
+</body>
+</html>
+
+

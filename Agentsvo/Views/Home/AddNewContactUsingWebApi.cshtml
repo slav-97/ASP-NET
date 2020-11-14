@@ -1,0 +1,67 @@
+﻿@model Agentsvo.Models.PhoneContact
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddNewContactUsingWebApi</title>
+</head>
+<body>
+    <div>
+        <form action="~/api/Web/" method="post">
+            @Html.ValidationSummary()
+            <table>
+
+                <tr>
+                    <td>
+                        Введите имя:
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => x.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Введите фамилию:
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => x.Surname)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Введите дату сделки(год-месяц-день):
+                    </td>
+                    <td>
+                        @Html.EditorFor(x => x.BirthDay)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Введите услугу:
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => x.Usluga)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Введите номер телефона:
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => x.PhoneNumber)
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="AddNewContactByWebController" />
+        </form>
+    </div>
+</body>
+</html>
+
+

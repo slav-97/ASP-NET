@@ -1,0 +1,54 @@
+﻿@model Agentsvo.Models.PhoneContact
+@{
+    Layout = null;
+}
+<!DOCT
+YPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SearchContact</title>
+    <link href="~/Content/homepagestyle.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/editionContactStyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary()
+            <table>
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(x => x.Id)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(x => x.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(x => x.Surname)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(x => x.BirthDay)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(x => x.Usluga)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(x => x.PhoneNumber)
+                    </td>
+                </tr>
+            </table>
+        </div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+﻿@{
+                /**/
+
+                ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Список контактов</title>
+    <link href="~/Content/homepagestyle.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/editionContactStyle.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    @Html.ValidationSummary()
+    <div>
+        <h3>Список контактов</h3>
+        <table class="Contacts-List">
+            <tr>
+                <td><h3>ID</h3></td>
+                <td><h3>Имя</h3></td>
+                <td><h3>Фамилия</h3></td>
+                <td><h3>Дата сделки</h3></td>
+                <td><h3>Услуга</h3></td>
+                <td><h3>Номер телефона</h3></td>
+            </tr>
+            @foreach (var contact in ViewBag.Contacts)
+            {
+                <tr>
+                    <td>@contact.Id</td>
+                    <td><p>@contact.Name</p></td>
+                    <td><p>@contact.Surname</p></td>
+                    <td><p>@contact.BirthDay</p></td>
+                    <td><p>@contact.Usluga</p></td>
+                    <td><p>@contact.PhoneNumber</p></td>
+                </tr>
+            }
+        </table>
+        @Html.ActionLink("AddNewContact", "AddNewContact")<br />
+        @Html.ActionLink("UpdateContact", "UpdateContact")<br />
+        @Html.ActionLink("AddNewContactUsingWebApi", "AddNewContactUsingWebApi")<br />
+    </div>
+    <form method="get" action="/home/DeleteContact">
+        <table>
+            <tr>
+                <td>
+                    Введите ID контакта:
+                </td>
+                <td>
+                    <input type="text" name="id" id="contactId" />
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="DeleteContactById" /><br />
+    </form>
+    <form action="~/api/Web/" method="delete">
+
+        <table>
+            <tr>
+                <td>
+                    Введите ID контакта:
+                </td>
+                <td>
+                    <input type="text" name="id" id="id" />
+                </td>
+            </tr>
+        </table>
+    </form>
+        <input type="submit" value="DeleteContactByIdUsingWebApi" onclick="DeleteContactById()"></input><br />
+    
+    <script type="text/javascript">
+        if ("@ViewBag.message" != "") {
+
+
+            if ("@ViewBag.message" == "Ok") {
+                alert("Success");
+            }
+            else {
+                alert("@ViewBag.message")
+            }
+        }
+        function DeleteContactById() {
+            var id = $('#id').val()
+            $.ajax({
+                url: 'http://localhost:55773/api/Web/' + id,
+                type: 'DELETE',
+                dataType: 'xml',
+                success: function (data) {
+                    if (data.documentElement.childNodes[0].nodeValue == "Ok") {
+                        alert("Success!");
+                        location.reload();
+                    }
+                    else {
+                        alert(data.documentElement.childNodes[0].nodeValue);
+                    }
+                },
+                error: function () {
+                    alert("Error");
+                    location.reload();
+                }
+            });
+        }
+    </script>
+    <input type="text" name="name" id="search" />
+    <input type='button' id="submit" value='Поиск' />
+    <div id="results"></div>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#submit').click(function (e) {
+            e.preventDefault();
+            var name = $('#search').val();
+            /*name=encodeURIComponent(name);*/
+            $('#results').load('@Url.Action("SearchContact", "Home")/'+name)
+        });
+    });
+    </script>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+            <h4>Агентство</h4>
+        </div>
+        <div class="modal-body">
+            <dl class="dl-horizontal">
+                
+            </dl>
+        </div>
+    </div>
+</body>
+</html>
+
